@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <title>班级法院服务平台</title>
+    <style>
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            right: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+<!-- 导航栏 -->
+<nav class="bg-blue-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-white text-2xl font-bold">班级法院服务平台</h1>
+        <div>
+            <a href="indax-2.html" class="text-white px-4 hover:text-gray-300">主页</a>
+            <a href="page2-2.html" class="text-white px-4 hover:text-gray-300">重要事件</a>
+            <a href="page3-2.html" class="text-white px-4 hover:text-gray-300">历史案件</a>
+            <a href="page4-2.html" class="text-white px-4 hover:text-gray-300">法官风貌</a>
+            <div class="dropdown">
+                <i class="fas fa-user-circle text-white text-2xl cursor-pointer"></i>
+                <div class="dropdown-content">
+                    <a href="settings.html">修改设置</a>
+                    <a href="page1.html">进入后台</a>
+                    <a href="indax.html">退出登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 主页 -->
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">最新新闻</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-md shadow-md">
+            <h3 class="text-xl font-bold mb-2">高新一中初级中学A3班班主任车逍同志签发 法院〔2025〕1号 决定</h3>
+            <button id="toggleButton" class="flex items-center text-blue-500 hover:text-blue-700 focus:outline-none"
+                    onclick="toggleImage()">
+                <i class="fa-solid fa-chevron-down mr-2"></i>
+                <span>展开图片</span>
+            </button>
+            <div id="imageContainer" class="hidden mt-4 overflow-hidden transition-all duration-300">
+                <img src="关于高新一中初级中学A3班法院成立的决定_00.png"
+                     alt="关于高新一中初级中学A3班法院成立的决定" class="w-full h-auto rounded-md">
+            </div>
+            <p class="text-gray-600">关于高新一中初级中学A3班法院成立的决定</p>
+        </div>
+    </div>
+    <script>
+        function toggleImage() {
+            const imageContainer = document.getElementById('imageContainer');
+            const toggleButton = document.getElementById('toggleButton');
+            const icon = toggleButton.querySelector('i');
+
+            if (imageContainer.classList.contains('hidden')) {
+                imageContainer.classList.remove('hidden');
+                toggleButton.querySelector('span').textContent = '折叠图片';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                imageContainer.classList.add('hidden');
+                toggleButton.querySelector('span').textContent = '展开图片';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+    </script>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-md shadow-md">
+            <h3 class="text-xl font-bold mb-2">高新一中初级中学A3班班主任车逍同志签发 法院〔2025〕2号 决定</h3>
+            <button id="toggleButton2" class="flex items-center text-blue-500 hover:text-blue-700 focus:outline-none"
+                    onclick="toggleImage2()">
+                <i class="fa-solid fa-chevron-down mr-2"></i>
+                <span>展开图片</span>
+            </button>
+            <div id="imageContainer2" class="hidden mt-4 overflow-hidden transition-all duration-300">
+                <img src="关于高新一中初级中学A3班法院招募法官的决定_00.png"
+                     alt="关于高新一中初级中学A3班法院招募法官的决定" class="w-full h-auto rounded-md">
+            </div>
+            <p class="text-gray-600">关于高新一中初级中学A3班法院招募法官的决定</p>
+        </div>
+    </div>
+    <script>
+        function toggleImage2() {
+            const imageContainer2 = document.getElementById('imageContainer2');
+            const toggleButton2 = document.getElementById('toggleButton2');
+            const icon = toggleButton2.querySelector('i');
+
+            if (imageContainer2.classList.contains('hidden')) {
+                imageContainer2.classList.remove('hidden');
+                toggleButton2.querySelector('span').textContent = '折叠图片';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                imageContainer2.classList.add('hidden');
+                toggleButton2.querySelector('span').textContent = '展开图片';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+    </script>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+
+        adminLoginBtn.addEventListener('click', () => {
+            // 跳转到登录页面
+            window.location.href = 'login.html';
+        });
+    });
+</script>
+</body>
+
+</html>
