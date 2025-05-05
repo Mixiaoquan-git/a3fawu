@@ -80,6 +80,7 @@
     <!-- 历史案件将动态添加到这里 -->
   </div>
 </div>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const adminLoginBtn = document.getElementById('adminLoginBtn');
@@ -93,19 +94,44 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const historyCases = document.getElementById('history-cases');
-    const cases = JSON.parse(localStorage.getItem('cases')) || [];
+    const request = indexedDB.open('caseDatabase', 1);
+    let db;
 
-    cases.forEach(caseData => {
-      const caseElement = document.createElement('div');
-      caseElement.classList.add('bg-white', 'p-4', 'rounded-md', 'shadow-md', 'mb-4');
-      caseElement.innerHTML = `
-          <h3 class="text-xl font-bold mb-2">${caseData.name}</h3>
-          <p class="text-gray-600">判决书内容: ${caseData.judgment}</p>
-          <p class="text-gray-600">案件经过: ${caseData.process}</p>
-          <p class="text-gray-600">庭审过程: ${caseData.trial}</p>
-        `;
-      historyCases.appendChild(caseElement);
-    });
+    request.onupgradeneeded = function (event) {
+      db = event.target.result;
+      const objectStore = db.createObjectStore('cases', { keyPath: 'id', autoIncrement: true });
+      objectStore.createIndex('name', 'name', { unique: false });
+    };
+
+    request.onsuccess = function (event) {
+      db = event.target.result;
+      const transaction = db.transaction(['cases'], 'readonly');
+      const objectStore = transaction.objectStore('cases');
+      const getAllRequest = objectStore.getAll();
+
+      getAllRequest.onsuccess = function (event) {
+        const cases = event.target.result;
+        cases.forEach(caseData => {
+          const caseElement = document.createElement('div');
+          caseElement.classList.add('bg-white', 'p-4', 'rounded-md', 'shadow-md', 'mb-4');
+          caseElement.innerHTML = `
+                            <h3 class="text-xl font-bold mb-2">${caseData.name}</h3>
+                            <p class="text-gray-600">判决书内容: ${caseData.judgment}</p>
+                            <p class="text-gray-600">案件经过: ${caseData.process}</p>
+                            <p class="text-gray-600">庭审过程: ${caseData.trial}</p>
+                        `;
+          historyCases.appendChild(caseElement);
+        });
+      };
+
+      getAllRequest.onerror = function (event) {
+        console.error('Error getting cases:', event.target.error);
+      };
+    };
+
+    request.onerror = function (event) {
+      console.error('Error opening database:', event.target.error);
+    };
   });
 </script>
 </body>
