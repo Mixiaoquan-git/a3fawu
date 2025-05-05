@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  <title>班级法院服务平台 - 查看历史案件</title>
+  <style>
+    /* 下拉菜单样式 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      right: 0;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* 历史案件淡入动画 */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #history-cases > div {
+      animation: fadeIn 0.5s ease-out;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+<!-- 导航栏 -->
+<nav class="bg-blue-600 p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-white text-2xl font-bold">班级法院服务平台</h1>
+    <div>
+      <a href="indax.html" class="text-white px-4 hover:text-gray-300">主页</a>
+      <a href="page2.html" class="text-white px-4 hover:text-gray-300">重要事件</a>
+      <a href="page3.html" class="text-white px-4 hover:text-gray-300">历史案件</a>
+      <a href="page4.html" class="text-white px-4 hover:text-gray-300">法官风貌</a>
+      <button id="adminLoginBtn" class="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-200">
+        管理员登录
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="container mx-auto p-4">
+  <h2 class="text-2xl font-bold mb-4">查看历史案件</h2>
+  <div id="history-cases">
+    <!-- 历史案件将动态添加到这里 -->
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+
+    adminLoginBtn.addEventListener('click', () => {
+      // 跳转到登录页面
+      window.location.href = 'login.html';
+    });
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const historyCases = document.getElementById('history-cases');
+    const request = indexedDB.open('caseDatabase', 1);
+    let db;
+
+    request.onupgradeneeded = function (event) {
+      db = event.target.result;
+      const objectStore = db.createObjectStore('cases', { keyPath: 'id', autoIncrement: true });
+      objectStore.createIndex('name', 'name', { unique: false });
+    };
+
+    request.onsuccess = function (event) {
+      db = event.target.result;
+      const transaction = db.transaction(['cases'], 'readonly');
+      const objectStore = transaction.objectStore('cases');
+      const getAllRequest = objectStore.getAll();
+
+      getAllRequest.onsuccess = function (event) {
+        const cases = event.target.result;
+        cases.forEach(caseData => {
+          const caseElement = document.createElement('div');
+          caseElement.classList.add('bg-white', 'p-4', 'rounded-md', 'shadow-md', 'mb-4');
+          caseElement.innerHTML = `
+                            <h3 class="text-xl font-bold mb-2">${caseData.name}</h3>
+                            <p class="text-gray-600">判决书内容: ${caseData.judgment}</p>
+                            <p class="text-gray-600">案件经过: ${caseData.process}</p>
+                            <p class="text-gray-600">庭审过程: ${caseData.trial}</p>
+                        `;
+          historyCases.appendChild(caseElement);
+        });
+      };
+
+      getAllRequest.onerror = function (event) {
+        console.error('Error getting cases:', event.target.error);
+      };
+    };
+
+    request.onerror = function (event) {
+      console.error('Error opening database:', event.target.error);
+    };
+  });
+</script>
+</body>
+
+</html>
